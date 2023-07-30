@@ -278,11 +278,10 @@ int main(int argc, char* argv[])
                 if ( ! (alignment.SecondaryFlag() || alignment.QCFailFlag() || alignment.SupplementaryFlag() ) )
                 {
                     counter.increment("Unique Mapping, Vendor QC Passed Reads");
-
                     unsigned read_len = alignment.Sequence().length();
                     read_lengths.push_back(read_len);
                     sum_read_lengths += read_len;
-                    
+
                     //raw counts:
                     if (!alignment.PairedFlag()) counter.increment("Unpaired Reads");
 
