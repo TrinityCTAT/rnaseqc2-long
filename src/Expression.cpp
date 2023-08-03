@@ -309,8 +309,9 @@ namespace rnaseqc {
     // More efficient and less buggy
 
     double exonAlignmentMetrics(map<chrom, list<Feature>> &features, Metrics &counter,
-                                vector<Feature> &blocks, Alignment &alignment,
-                                SeqLib::HeaderSequenceVector &sequenceTable, unsigned int length,                                
+                                vector<Feature> &blocks,
+                                Alignment &alignment,
+                                SeqLib::HeaderSequenceVector &sequenceTable, unsigned int length,
                                 Strand orientation, BaseCoverage &baseCoverage, const bool highQuality,
                                 const bool singleEnd, map<string, FragmentMateEntry> &fragments, Fasta &fastaReader)
     {
@@ -453,7 +454,7 @@ namespace rnaseqc {
                     counter.increment("HQ Intronic Reads");
                     counter.increment("HQ Intragenic Reads");
                 }
-                // cout << "Intronic_reads: " << alignment.Qname() << endl;
+                //cout << "Intronic_reads: " << alignment.Qname() << endl;
             }
             else
             {
