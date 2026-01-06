@@ -1,0 +1,1 @@
+{"rnaseqc2_long.bam":"${this.minimap2_bam}","rnaseqc2_long.collapsed_gtf":"gs://mdl-refs/GRCh38/GRCh38.gencode.v39.collapsed.gtf","rnaseqc2_long.sample_id":"${this.kinnex_sample_id}"}
