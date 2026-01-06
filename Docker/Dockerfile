@@ -1,6 +1,6 @@
-# Dockerfile for RNASeQC
+# Dockerfile for RNASeQC2-long
 FROM ubuntu:20.04
-MAINTAINER Aaron Graubert
+MAINTAINER bhaas
 
 RUN apt-get update && apt-get install -y software-properties-common && \
     apt-get update && apt-get install -y \
