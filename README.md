@@ -1,3 +1,8 @@
+
+Includes some slight mods to repurpose for long reads using minimap2-aligned bams.
+
+Original documentation below:
+
 # RNA-SeQC
 
 [![Version](https://img.shields.io/github/release/getzlab/rnaseqc.svg?label=Version)](https://github.com/getzlab/rnaseqc/releases)
