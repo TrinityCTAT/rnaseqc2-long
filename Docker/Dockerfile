@@ -24,9 +24,8 @@ RUN apt-get update && apt-get install -y software-properties-common && \
 
 
 WORKDIR /usr/local/src
-RUN git clone --recursive https://github.com/TrinityCTAT/rnaseqc.git && \
-      cd rnaseqc && \
-      git checkout mm2_integration && \
+RUN git clone --recursive https://github.com/TrinityCTAT/rnaseqc2-long.git && \
+      cd rnaseqc2-long && \
       make && \
-      ln -sf /usr/local/src/rnaseqc/rnaseqc /usr/local/bin/rnaseqc
+      ln -sf /usr/local/src/rnaseqc2-long/rnaseqc /usr/local/bin/rnaseqc
 

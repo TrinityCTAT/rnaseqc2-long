@@ -1,1 +1,1 @@
-docker push trinityctat/rnaseqc
+docker push trinityctat/rnaseqc2-long

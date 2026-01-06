@@ -1,1 +1,1 @@
-docker build -t trinityctat/rnaseqc .
+docker build -t trinityctat/rnaseqc2-long .
