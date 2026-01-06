@@ -4,7 +4,7 @@ workflow rnaseqc2_long {
   input {
     String sample_id
     File bam
-    File? bai
+    File bai
 
     # IMPORTANT: RNA-SeQC 2 expects a "collapsed" GTF (see README).
     File collapsed_gtf
