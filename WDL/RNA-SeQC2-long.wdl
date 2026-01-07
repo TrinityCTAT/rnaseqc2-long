@@ -151,7 +151,7 @@ task run_rnaseqc {
 
     # Run RNA-SeQC 2
     # CLI: rnaseqc [OPTIONS] gtf bam output_dir
-    rnaseqc "${EXTRA_ARGS[@]}" \
+    rnaseqc2-long "${EXTRA_ARGS[@]}" \
       "~{collapsed_gtf}" \
       "~{sample_id}.bam" \
       out \
