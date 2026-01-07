@@ -18,13 +18,13 @@ OBJECTS=$(SOURCES:.cpp=.o)
 SEQFLAGS=$(STDLIB) -D_GLIBCXX_USE_CXX11_ABI=$(ABI)
 SHELL=/bin/bash
 
-rnaseqc: $(foreach file,$(OBJECTS),$(SRCDIR)/$(file)) SeqLib/lib/libseqlib.a SeqLib/lib/libhts.a
+rnaseqc2-long: $(foreach file,$(OBJECTS),$(SRCDIR)/$(file)) SeqLib/lib/libseqlib.a SeqLib/lib/libhts.a
 	$(CC) -O3 $(LIBRARY_PATHS) -o $@ $^ $(STATIC_LIBS) $(LIBS)
 
 .PHONY: lib
 
 lib: $(foreach file,$(OBJECTS),$(SRCDIR)/$(file))
-	ar -rcs rnaseqc.a $^
+	ar -rcs rnaseqc2-long.a $^
 
 %.o: %.cpp
 	$(CC) $(CFLAGS) -I. $(INCLUDE_DIRS) -c -o $@ $<
@@ -46,13 +46,13 @@ test: test-version test-single test-chr1 test-downsampled test-legacy test-crams
 
 .PHONY: test-version
 
-test-version: rnaseqc
-	[ ! -z "$(shell ./rnaseqc --version)" ]
+test-version: rnaseqc2-long
+	[ ! -z "$(shell ./rnaseqc2-long --version)" ]
 
 .PHONY: test-single
 
-test-single: rnaseqc
-	./rnaseqc test_data/single_pair.gtf test_data/single_pair.bam .test_output
+test-single: rnaseqc2-long
+	./rnaseqc2-long test_data/single_pair.gtf test_data/single_pair.bam .test_output
 	python3 test_data/approx_diff.py .test_output/single_pair.bam.metrics.tsv test_data/single_pair.output/single_pair.bam.metrics.tsv -m metrics -c single_pair.bam single_pair.bam_
 	python3 test_data/approx_diff.py .test_output/single_pair.bam.gene_reads.gct <(gzcat test_data/single_pair.output/single_pair.bam.gene_reads.gct.gz) -m tables -c Counts Counts_
 	python3 test_data/approx_diff.py .test_output/single_pair.bam.gene_tpm.gct <(gzcat test_data/single_pair.output/single_pair.bam.gene_tpm.gct.gz) -m tables -c TPM TPM_
@@ -62,8 +62,8 @@ test-single: rnaseqc
 
 .PHONY: test-chr1
 
-test-chr1: rnaseqc
-	./rnaseqc test_data/chr1.gtf test_data/chr1.bam .test_output --coverage
+test-chr1: rnaseqc2-long
+	./rnaseqc2-long test_data/chr1.gtf test_data/chr1.bam .test_output --coverage
 	python3 test_data/approx_diff.py .test_output/chr1.bam.metrics.tsv test_data/chr1.output/chr1.bam.metrics.tsv -m metrics -c chr1.bam chr1.bam_
 	python3 test_data/approx_diff.py .test_output/chr1.bam.gene_reads.gct <(gzcat test_data/chr1.output/chr1.bam.gene_reads.gct.gz) -m tables -c Counts Counts_
 	python3 test_data/approx_diff.py .test_output/chr1.bam.gene_tpm.gct <(gzcat test_data/chr1.output/chr1.bam.gene_tpm.gct.gz) -m tables -c TPM TPM_
@@ -77,8 +77,8 @@ test-chr1: rnaseqc
 
 .PHONY: test-downsampled
 
-test-downsampled: rnaseqc
-	./rnaseqc test_data/downsampled.gtf test_data/downsampled.bam --bed test_data/downsampled.bed --coverage .test_output
+test-downsampled: rnaseqc2-long
+	./rnaseqc2-long test_data/downsampled.gtf test_data/downsampled.bam --bed test_data/downsampled.bed --coverage .test_output
 	python3 test_data/approx_diff.py .test_output/downsampled.bam.metrics.tsv test_data/downsampled.output/downsampled.bam.metrics.tsv -m metrics -c downsampled.bam downsampled.bam_
 	python3 test_data/approx_diff.py .test_output/downsampled.bam.gene_reads.gct <(gzcat test_data/downsampled.output/downsampled.bam.gene_reads.gct.gz) -m tables -c Counts Counts_
 	python3 test_data/approx_diff.py .test_output/downsampled.bam.gene_tpm.gct <(gzcat test_data/downsampled.output/downsampled.bam.gene_tpm.gct.gz) -m tables -c TPM TPM_
@@ -93,8 +93,8 @@ test-downsampled: rnaseqc
 
 .PHONY: test-legacy
 
-test-legacy: rnaseqc
-	./rnaseqc test_data/downsampled.gtf test_data/downsampled.bam --bed test_data/downsampled.bed --coverage .test_output --legacy
+test-legacy: rnaseqc2-long
+	./rnaseqc2-long test_data/downsampled.gtf test_data/downsampled.bam --bed test_data/downsampled.bed --coverage .test_output --legacy
 	python3 test_data/approx_diff.py .test_output/downsampled.bam.metrics.tsv test_data/legacy.output/downsampled.bam.metrics.tsv -m metrics -c downsampled.bam downsampled.bam_
 	python3 test_data/approx_diff.py .test_output/downsampled.bam.gene_reads.gct <(gzcat test_data/legacy.output/downsampled.bam.gene_reads.gct.gz) -m tables -c Counts Counts_
 	python3 test_data/approx_diff.py .test_output/downsampled.bam.gene_tpm.gct <(gzcat test_data/legacy.output/downsampled.bam.gene_tpm.gct.gz) -m tables -c TPM TPM_
@@ -112,9 +112,9 @@ test-legacy: rnaseqc
 
 .PHONY: test-crams
 
-test-crams: rnaseqc
+test-crams: rnaseqc2-long
 	touch test_data/chr1.fasta.fai
-	./rnaseqc test_data/chr1.gtf test_data/chr1.cram .test_output --coverage --fasta test_data/chr1.fasta
+	./rnaseqc2-long test_data/chr1.gtf test_data/chr1.cram .test_output --coverage --fasta test_data/chr1.fasta
 	python3 test_data/approx_diff.py .test_output/chr1.cram.metrics.tsv test_data/chr1.output/chr1.cram.metrics.tsv -m metrics -c chr1.cram chr1.cram_
 	python3 test_data/approx_diff.py .test_output/chr1.cram.gene_reads.gct <(gzcat test_data/chr1.output/chr1.bam.gene_reads.gct.gz) -m tables -c Counts Counts_
 	python3 test_data/approx_diff.py .test_output/chr1.cram.gene_tpm.gct <(gzcat test_data/chr1.output/chr1.bam.gene_tpm.gct.gz) -m tables -c TPM TPM_
@@ -129,6 +129,6 @@ test-crams: rnaseqc
 
 .PHONY: test-expected-failures
 
-test-expected-failures: rnaseqc
-	./rnaseqc test_data/gencode.v26.collapsed.gtf test_data/downsampled.bam .test_output 2>/dev/null; test $$? -eq 11
+test-expected-failures: rnaseqc2-long
+	./rnaseqc2-long test_data/gencode.v26.collapsed.gtf test_data/downsampled.bam .test_output 2>/dev/null; test $$? -eq 11
 	rm -rf .test_output

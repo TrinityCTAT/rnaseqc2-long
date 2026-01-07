@@ -2,8 +2,10 @@
 __pycache__/
 src/*.o
 rnaseqc
+rnaseqc2-long
 !python/rnaseqc
 rnaseqc.a
+rnaseqc2-long.a
 build/
 *.egg-info/
 *.bam
