@@ -216,7 +216,7 @@ int main(int argc, char* argv[])
 
         
         vector<unsigned int> read_lengths;
-        unsigned int sum_read_lengths = 0;
+        unsigned long long sum_read_lengths = 0ull;
         
         
         //Begin parsing the bam.  Each alignment is run through various sets of metrics
@@ -561,12 +561,20 @@ int main(int argc, char* argv[])
 
         // get read length stats.
         std::sort(read_lengths.begin(), read_lengths.end());
-        unsigned int num_uniq_mapped_reads = read_lengths.size();
-        float mean_read_length = sum_read_lengths / static_cast<float>(num_uniq_mapped_reads);
-        unsigned int max_read_length = read_lengths[read_lengths.size()-1];
-        unsigned int median_read_length =  computeMedian(read_lengths.size(), read_lengths.begin());
-        unsigned int third_quartile_read_length = read_lengths[static_cast<int>(0.75 * read_lengths.size())];
-        unsigned int first_quartile_read_length = read_lengths[static_cast<int>(0.25 * read_lengths.size())];
+        const unsigned int num_uniq_mapped_reads = read_lengths.size();
+        double mean_read_length = 0.0;
+        unsigned int max_read_length = 0;
+        unsigned int median_read_length = 0;
+        unsigned int third_quartile_read_length = 0;
+        unsigned int first_quartile_read_length = 0;
+        if (num_uniq_mapped_reads)
+        {
+            mean_read_length = static_cast<double>(sum_read_lengths) / static_cast<double>(num_uniq_mapped_reads);
+            max_read_length = read_lengths.back();
+            median_read_length = computeMedian(read_lengths.size(), read_lengths.begin());
+            third_quartile_read_length = read_lengths[static_cast<int>(0.75 * read_lengths.size())];
+            first_quartile_read_length = read_lengths[static_cast<int>(0.25 * read_lengths.size())];
+        }
         
         ofstream output(outputDir.Get()+"/"+SAMPLENAME+".metrics.tsv");
         //output rates and other fractions to the report
