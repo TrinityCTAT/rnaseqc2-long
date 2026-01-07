@@ -577,6 +577,12 @@ int main(int argc, char* argv[])
         }
         
         ofstream output(outputDir.Get()+"/"+SAMPLENAME+".metrics.tsv");
+        auto writeMetricOrNA = [&](const std::string &label, double value) {
+            output << label << "\t";
+            if (std::isnan(value) || std::isinf(value)) output << "NA";
+            else output << value;
+            output << endl;
+        };
         //output rates and other fractions to the report
         output << "Sample\t" << SAMPLENAME << endl;
         output << "Mapping Rate\t" << counter.frac("Mapped Reads", "Unique Mapping, Vendor QC Passed Reads") << endl;
@@ -715,8 +721,8 @@ int main(int argc, char* argv[])
 //            output << "Median Exon CV\t" << exonMedian << endl;
 //            output << "Exon CV MAD\t" << (nExonCVs ? computeMedian(exonDeviations.size(), exonDeviations.begin()) * MAD_FACTOR : 0.0) << endl;
             statsTuple cv_stats = getStatistics(totalExonCV);
-            output << "Median Exon CV\t" << std::get<StatIdx::med>(cv_stats) << endl;
-            output << "Exon CV MAD\t" << std::get<StatIdx::mad>(cv_stats) << endl;
+            writeMetricOrNA("Median Exon CV", std::get<StatIdx::med>(cv_stats));
+            writeMetricOrNA("Exon CV MAD", std::get<StatIdx::mad>(cv_stats));
         }
         if (fastaFile) {
             ofstream gcReport(outputDir.Get() + "/" + SAMPLENAME + ".gc_content.tsv");
@@ -728,10 +734,10 @@ int main(int argc, char* argv[])
                     rough_gc.push_back(i);
             }
             statsTuple gc_stats = getAdvancedStatistics(rough_gc);
-            output << "Fragment GC Content Mean\t" << (double) std::get<StatIdx::avg>(gc_stats)/100.0 << endl;
-            output << "Fragment GC Content Std\t" << (double) std::get<StatIdx::std>(gc_stats)/100.0 << endl;
-            output << "Fragment GC Content Skewness\t" << std::get<StatIdx::skew>(gc_stats) << endl;
-            output << "Fragment GC Content Kurtosis\t" << std::get<StatIdx::kurt>(gc_stats) << endl;
+            writeMetricOrNA("Fragment GC Content Mean", static_cast<double>(std::get<StatIdx::avg>(gc_stats))/100.0);
+            writeMetricOrNA("Fragment GC Content Std", static_cast<double>(std::get<StatIdx::std>(gc_stats))/100.0);
+            writeMetricOrNA("Fragment GC Content Skewness", std::get<StatIdx::skew>(gc_stats));
+            writeMetricOrNA("Fragment GC Content Kurtosis", std::get<StatIdx::kurt>(gc_stats));
         }
 
         output.close();

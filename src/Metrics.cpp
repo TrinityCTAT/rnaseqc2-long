@@ -42,7 +42,10 @@ namespace rnaseqc {
 
     double Metrics::frac(std::string a, std::string b)
     {
-        return static_cast<double>(this->get(a)) / this->get(b);
+        const double denom = static_cast<double>(this->get(b));
+        if (denom == 0.0)
+            return 0.0;
+        return static_cast<double>(this->get(a)) / denom;
     }
 
     // Add coverage to an exon
@@ -332,7 +335,7 @@ namespace rnaseqc {
             writer << avg << "\t" << std << "\t" << (std / avg) << std::endl;
             return std::make_tuple(avg, std, (std / avg));
         }
-        writer << "0\t0\tnan" << std::endl;
+        writer << "0\t0\tNA" << std::endl;
         return std::make_tuple(-1, -1, -1);
     }
 
